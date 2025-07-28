@@ -63,7 +63,7 @@ struct Section01OpenApp: View {
             }
             Text("Перемещаем файл google-services.json в app")
             Button("Открыть папку app"){
-                openFinder(at: "/Users/main/FreedomSweetHaven/android/app")
+                openFinder(at: "/Users/\(NSUserName())/\(app.firstAppName)/android/app")
             }
             
             DefaultButtonView(title: "Готово") {
