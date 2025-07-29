@@ -75,7 +75,7 @@ struct Section02VSCode: View {
             Text("string.xml")
                 .font(.title)
             
-            AppTSX(appName: app.firstAppName)
+            StringXML(app: app)
             .padding(.bottom, 10)
             
             
