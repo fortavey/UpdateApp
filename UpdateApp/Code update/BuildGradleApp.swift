@@ -37,6 +37,10 @@ struct BuildGradleApp: View {
                 let fileURL = URL(fileURLWithPath: filePath)
                 let fileData = try Data(contentsOf: fileURL)
                 if let fileContents = String(data: fileData, encoding: .utf8) {
+                    if fileContents.contains("apply plugin: 'com.google.gms.google-services'") {
+                        success = true
+                        return
+                    }
                     let stringToReplace = "apply plugin: \"com.facebook.react\""
                     let replacementString = """
 apply plugin: "com.facebook.react"

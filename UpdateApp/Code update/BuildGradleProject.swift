@@ -37,6 +37,10 @@ struct BuildGradleProject: View {
                 let fileURL = URL(fileURLWithPath: filePath)
                 let fileData = try Data(contentsOf: fileURL)
                 if let fileContents = String(data: fileData, encoding: .utf8) {
+                    if fileContents.contains("classpath(\"com.google.gms:google-services:4.4.2\")") {
+                        success = true
+                        return
+                    }
                     let stringToReplace = "classpath(\"com.facebook.react:react-native-gradle-plugin\")"
                     let replacementString = """
 classpath("com.facebook.react:react-native-gradle-plugin")

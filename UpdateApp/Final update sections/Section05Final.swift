@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Cocoa
 
 struct Section05Final: View {
     var app: TaskWebViewModel
@@ -41,10 +42,21 @@ struct Section05Final: View {
                 CopyTextView(text: app.newAppName)
             }
             
-            Text("Собираем билд, заливаем обновление")
-                .font(.title2)
+            
+            HStack{
+                Text("Собираем билд")
+                    .font(.title2)
+                CopyTextView(text: "npx react-native build-android --mode=release")
+            }
+            
+            Button("Открыть папку с билдом"){
+                openFinder(at: "/Users/\(NSUserName())/\(app.firstAppName)/android/app/build/outputs/release")
+            }
+            
             HStack {
-                Text("Загружаем собранный билд для приложения \(app.appId) на аккаунт - \(app.createAccount)")
+                Text("Загружаем собранный билд для приложения ")
+                CopyTextView(text: app.appId)
+                Text(" на аккаунт - \(app.createAccount)")
                 Spacer()
             }
             
@@ -53,5 +65,10 @@ struct Section05Final: View {
             }
         }
         .sectionModifiers()
+    }
+    
+    func openFinder(at path: String) {
+        let url = URL(fileURLWithPath: path)
+        NSWorkspace.shared.open(url)
     }
 }

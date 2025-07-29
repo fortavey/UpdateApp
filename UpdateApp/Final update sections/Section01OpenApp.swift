@@ -30,13 +30,12 @@ struct Section01OpenApp: View {
                 .font(.title)
             
             VStack(alignment: .leading) {
-                Text("Перемещаем приложение в корень")
+                Text("Перемещаем приложение в корень и запускаем его")
                 CopyTextView(text: "cd ~/Apps")
                 CopyTextView(text: "mv \(app.firstAppName) ~/")
                 CopyTextView(text: "cd ~/\(app.firstAppName)")
                 CopyTextView(text: "npm i")
                 CopyTextView(text: "npx react-native start")
-                Text(" и запускаем его")
                 Spacer()
             }
             HStack {

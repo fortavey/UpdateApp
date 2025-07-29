@@ -37,6 +37,10 @@ struct GradleProperties: View {
                 let fileURL = URL(fileURLWithPath: filePath)
                 let fileData = try Data(contentsOf: fileURL)
                 if let fileContents = String(data: fileData, encoding: .utf8) {
+                    if fileContents.contains("android.enableJetifier=true") {
+                        success = true
+                        return
+                    }
                     let stringToReplace = "android.useAndroidX=true"
                     let replacementString = """
 android.useAndroidX=true

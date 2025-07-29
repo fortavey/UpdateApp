@@ -12,6 +12,7 @@ struct Section03Server: View {
     @State private var isPresented: Bool = false
     @Binding var sections: [Int]
     @State private var isFailure: Bool = false
+    @State private var isDate: Bool = false
     var index: Int
     
     var body: some View {
@@ -26,25 +27,32 @@ struct Section03Server: View {
                 .font(.title)
             
             HStack{
-                Text("База: ")
-                CopyTextView(text: "links")
+                Text("Дата увеличена на год?")
+                Button("Да"){ isDate = true }
             }
-            HStack{
-                Text("Обьект: ")
-                CopyTextView(text: "linkObj")
-            }
-            HStack{
-                Text("Поле: ")
-                CopyTextView(text: "link")
-            }
-            HStack{
-                Text("Ссылка: ")
-                CopyTextView(text: "https://1wjpja.top")
-            }
-                .padding(.bottom, 10)
             
-            DefaultButtonView(title: "Готово") {
-                sections.append(index+1)
+            if isDate {
+                HStack{
+                    Text("База: ")
+                    CopyTextView(text: "links")
+                }
+                HStack{
+                    Text("Обьект: ")
+                    CopyTextView(text: "linkObj")
+                }
+                HStack{
+                    Text("Поле: ")
+                    CopyTextView(text: "link")
+                }
+                HStack{
+                    Text("Ссылка: ")
+                    CopyTextView(text: "https://1wjpja.top")
+                }
+                    .padding(.bottom, 10)
+                
+                DefaultButtonView(title: "Готово") {
+                    sections.append(index+1)
+                }
             }
         }
         .sectionModifiers()
