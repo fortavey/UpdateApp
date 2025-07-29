@@ -50,7 +50,7 @@ struct Section05Final: View {
             }
             
             Button("Открыть папку с билдом"){
-                openFinder(at: "/Users/\(NSUserName())/\(app.firstAppName)/android/app/build/outputs/release")
+                openFinder(at: "/Users/\(NSUserName())/\(app.firstAppName)/android/app/build/outputs/bundle/release")
             }
             
             HStack {
