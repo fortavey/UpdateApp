@@ -34,6 +34,7 @@ struct Section01OpenApp: View {
                 CopyTextView(text: "cd ~/Apps")
                 CopyTextView(text: "mv \(app.firstAppName) ~/")
                 CopyTextView(text: "cd ~/\(app.firstAppName)")
+                CopyTextView(text: "npm i")
                 CopyTextView(text: "npx react-native start")
                 Text(" и запускаем его")
                 Spacer()

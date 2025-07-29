@@ -71,6 +71,13 @@ struct Section02VSCode: View {
             AppTSX(appName: app.firstAppName)
             .padding(.bottom, 10)
             
+            Divider()
+            Text("string.xml")
+                .font(.title)
+            
+            AppTSX(appName: app.firstAppName)
+            .padding(.bottom, 10)
+            
             
             Divider()
             Text("Синхронизируем зависимости в Android Studio")
