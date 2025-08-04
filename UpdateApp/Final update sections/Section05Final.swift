@@ -56,7 +56,8 @@ struct Section05Final: View {
             HStack {
                 Text("Загружаем собранный билд для приложения ")
                 CopyTextView(text: app.appId)
-                Text(" на аккаунт - \(app.createAccount)")
+                Text(" на аккаунт - ")
+                CopyTextView(text: app.createAccount)
                 Spacer()
             }
             

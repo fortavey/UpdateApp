@@ -25,6 +25,25 @@ struct Section03Server: View {
             }
             Text("Настройки Firebase")
                 .font(.title)
+                .padding(.bottom, 20)
+            
+            HStack{
+                Text("Открываем трансферный аккаунт - ")
+                CopyTextView(text: "\(app.transferAccount)")
+            }
+            
+            HStack{
+                Text("Создаем профиль Firebase: ")
+                CopyTextView(text: "\(app.newAppName)-\(app.firstAppName)")
+            }
+            HStack{
+                Text("ID пакета: ")
+                CopyTextView(text: "\(app.appId)")
+            }
+            Text("Перемещаем файл google-services.json в app")
+            Button("Открыть папку app"){
+                openFinder(at: "/Users/\(NSUserName())/\(app.firstAppName)/android/app")
+            }
             
             HStack{
                 Text("Дата увеличена на год?")
@@ -33,19 +52,19 @@ struct Section03Server: View {
             
             if isDate {
                 HStack{
-                    Text("База: ")
+                    Text("Collection ID: ")
                     CopyTextView(text: "links")
                 }
                 HStack{
-                    Text("Обьект: ")
+                    Text("Document ID: ")
                     CopyTextView(text: "linkObj")
                 }
                 HStack{
-                    Text("Поле: ")
+                    Text("Field: ")
                     CopyTextView(text: "link")
                 }
                 HStack{
-                    Text("Ссылка: ")
+                    Text("String: ")
                     CopyTextView(text: "https://1wjpja.top")
                 }
                     .padding(.bottom, 10)
@@ -56,5 +75,10 @@ struct Section03Server: View {
             }
         }
         .sectionModifiers()
+    }
+    
+    func openFinder(at path: String) {
+        let url = URL(fileURLWithPath: path)
+        NSWorkspace.shared.open(url)
     }
 }

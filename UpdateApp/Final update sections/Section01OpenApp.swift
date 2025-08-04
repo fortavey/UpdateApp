@@ -35,35 +35,15 @@ struct Section01OpenApp: View {
                 CopyTextView(text: "mv \(app.firstAppName) ~/")
                 CopyTextView(text: "cd ~/\(app.firstAppName)")
                 CopyTextView(text: "npm i")
+                CopyTextView(text: "open -a /Applications/Android\\ Studio.app")
                 CopyTextView(text: "npx react-native start")
                 Spacer()
             }
             HStack {
-                Text("Открываем Android studio. Находим приложение ")
+                Text("В Android studio находим приложение ")
                 CopyTextView(text: "\(app.firstAppName)")
                 Text(" и запускаем его")
                 Spacer()
-            }
-            HStack {
-                Text("Запуск через терминал. Вводим команду")
-                CopyTextView(text: "open -a /Applications/Android\\ Studio.app")
-                Spacer()
-            }
-            Text("Создание Firebase")
-                .font(.title)
-                .padding(.bottom, 20)
-            Text("Открываем трансферный аккаунт - \(app.transferAccount)")
-            HStack{
-                Text("Создаем профиль Firebase: ")
-                CopyTextView(text: "\(app.newAppName)-\(app.firstAppName)")
-            }
-            HStack{
-                Text("ID пакета: ")
-                CopyTextView(text: "\(app.appId)")
-            }
-            Text("Перемещаем файл google-services.json в app")
-            Button("Открыть папку app"){
-                openFinder(at: "/Users/\(NSUserName())/\(app.firstAppName)/android/app")
             }
             
             DefaultButtonView(title: "Готово") {

@@ -15,6 +15,7 @@ struct ContentView: View {
             HStack{
                 Text("Финальное обновление")
                     .font(.title3)
+                    .padding()
                 Button("Сформировать список"){
                     mainVM.getTasksWEBList()
                 }
