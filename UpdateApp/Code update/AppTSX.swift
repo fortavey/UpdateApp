@@ -165,7 +165,10 @@ function App() {
             const regex = /gclid=/;
             let match = regex.test(installReferrer);
             if(match && webUAC){
-                setWebLink(webUAC)
+                const gclid = getGclidFromReferer()
+                let newLink = webUAC
+                newLink = newLink.replace('{gclid}', `${gclid}`)
+                gclid ? setWebLink(newLink) : setWebLink(webUAC)
             }else if(match && webASO){
                 setWebLink(webASO)
             }else if(webASO){
@@ -175,6 +178,13 @@ function App() {
             }
         }
     }, [installReferrer])
+
+    const getGclidFromReferer = () => {
+      let gclid = installReferrer.split('gclid=')[1]
+      if(gclid) gclid = gclid.split('&')[0]
+
+      return gclid || null
+    }
 
     useEffect(() => {
         if (webLink) {
