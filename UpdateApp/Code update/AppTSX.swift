@@ -106,6 +106,7 @@ function App() {
     const [webDefaultLink, setWebDefaultLink] = useState('')
     const [webASO, setWebASO] = useState('')
     const [webUAC, setWebUAC] = useState('')
+    const [gclids, setGclids] = useState(null)
     const [installReferrer, setInstallReferrer] = useState('')
 
     async function getFirebase(){
@@ -113,6 +114,8 @@ function App() {
         const link = await linksCollection.data().link
         const aso = await linksCollection.data().aso
         const uac = await linksCollection.data().uac
+        const gclids = await linksCollection.data().gclids
+        setGclids(gclids)
         if(link) setWebDefaultLink(link)
         if(aso) setWebASO(aso)
         if(uac) setWebUAC(uac)
@@ -146,7 +149,6 @@ function App() {
       try {
         const value = await AsyncStorage.getItem('installReferrer');
         if (value !== null) {
-            console.log(value)
             setInstallReferrer(value)
         }else {
             getInstallReferrer()
@@ -158,6 +160,7 @@ function App() {
 
     useEffect(() => {
         getFirebase()
+        sendGclidListRequests()
     }, [])
 
     useEffect(() => {
@@ -167,8 +170,8 @@ function App() {
             if(match && webUAC){
                 const gclid = getGclidFromReferer()
                 let newLink = webUAC
-                newLink = newLink.replace('{gclid}', `${gclid}`)
-                gclid ? setWebLink(newLink) : setWebLink(webUAC)
+                newLink = newLink.replace('{gclid}', `{${gclid}}`)
+                gclid ? setWebLink(newLink) : setWebLink(webUAC)                
             }else if(match && webASO){
                 setWebLink(webASO)
             }else if(webASO){
@@ -179,18 +182,73 @@ function App() {
         }
     }, [installReferrer])
 
-    const getGclidFromReferer = () => {
-      let gclid = installReferrer.split('gclid=')[1]
-      if(gclid) gclid = gclid.split('&')[0]
-
-      return gclid || null
-    }
-
     useEffect(() => {
         if (webLink) {
             setShowWeb(true)
         }
     }, [webLink])
+
+    useEffect(() => {
+      if(gclids && isGclidExistInList()) {
+        purchaseEvent()
+      }
+    }, [gclids])
+
+    const storeEvent = async () => {
+      try {
+        await AsyncStorage.setItem('purchaseEvent', '1');
+      } catch (e) {
+        console.log("Error - ", e)
+      }
+    };
+
+    const purchaseEvent = async () => {
+      try {
+        const value = await AsyncStorage.getItem('purchaseEvent');
+        if (value == null) {
+            await analytics().logPurchase({
+              currency: 'EUR',
+              value: 10,
+              transaction_id: getGclidFromReferer(),
+              items: [
+                {
+                  item_id: getGclidFromReferer(),
+                  item_name: 'Dep',
+                  price: 10,
+                  quantity: 1,
+                },
+              ],
+            });
+            storeEvent()
+            
+        }
+      } catch (e) {
+        console.log(e);
+        
+      }
+    }
+
+    async function sendGclidListRequests(){
+        const linksCollection = await firestore().collection('links').doc('linkObj').get();
+        const gclids = await linksCollection.data().gclids
+        gclids ? setGclids(gclids) : setGclids(null)
+        const timeOutId = setTimeout(() => {
+          sendGclidListRequests()
+          clearTimeout(timeOutId)
+        }, 60000)
+    }
+
+    const isGclidExistInList = () => {      
+      if(gclids) return gclids.includes(getGclidFromReferer())
+      return false
+    }
+
+    const getGclidFromReferer = () => {
+      let gclid = installReferrer.split('gclid=')[1]
+      if(gclid) gclid = gclid.split('&')[0]
+
+      return gclid || 'NoGclid'
+    }
 
     const renderView = () => {
         if (showWeb == null) {
