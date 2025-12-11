@@ -57,6 +57,45 @@ apply plugin: 'com.google.gms.google-services'
             }catch {
                 showAlert = true
             }
+            
+            do {
+                let fileURL = URL(fileURLWithPath: filePath)
+                let fileData = try Data(contentsOf: fileURL)
+                if let fileContents = String(data: fileData, encoding: .utf8) {
+                    if fileContents.contains("signingConfig signingConfigs.release") {
+                        success = true
+                        return
+                    }
+                    var stringToReplace = "signingConfigs {"
+                    var replacementString = """
+signingConfigs {
+    release {
+        if (project.hasProperty('MYAPP_UPLOAD_STORE_FILE')) {
+            storeFile file(MYAPP_UPLOAD_STORE_FILE)
+            storePassword MYAPP_UPLOAD_STORE_PASSWORD
+            keyAlias MYAPP_UPLOAD_KEY_ALIAS
+            keyPassword MYAPP_UPLOAD_KEY_PASSWORD
+        }
+    }
+"""
+                    var replacedString = fileContents.replacingOccurrences(of: stringToReplace, with: replacementString)
+                    
+                    stringToReplace = "signingConfig signingConfigs.debug"
+                    replacementString = "signingConfig signingConfigs.release"
+                    
+                    replacedString = replacedString.replacingOccurrences(of: stringToReplace, with: replacementString)
+                    
+                    do {
+                        try replacedString.write(to: fileURL, atomically: true, encoding: .utf8)
+                        success = true
+                    } catch {
+                        showAlert = true
+                    }
+                }
+            }catch {
+                showAlert = true
+            }
+            
         } else {
             showAlert = true
         }

@@ -62,29 +62,19 @@ android.enableJetifier=true
                 let fileURL = URL(fileURLWithPath: filePath)
                 let fileData = try Data(contentsOf: fileURL)
                 if let fileContents = String(data: fileData, encoding: .utf8) {
-                    if fileContents.contains("signingConfig signingConfigs.release") {
+                    if fileContents.contains("MYAPP_UPLOAD_STORE_FILE=\(appName.lowercased()).keystore") {
                         success = true
                         return
                     }
-                    var stringToReplace = "signingConfigs {"
-                    var replacementString = """
-signingConfigs {
-    release {
-        if (project.hasProperty('MYAPP_UPLOAD_STORE_FILE')) {
-            storeFile file(MYAPP_UPLOAD_STORE_FILE)
-            storePassword MYAPP_UPLOAD_STORE_PASSWORD
-            keyAlias MYAPP_UPLOAD_KEY_ALIAS
-            keyPassword MYAPP_UPLOAD_KEY_PASSWORD
-        }
-    }
+                    let stringToReplace = "# Project-wide Gradle settings."
+                    let replacementString = """
+# Project-wide Gradle settings.
+MYAPP_UPLOAD_STORE_FILE=\(appName.lowercased()).keystore
+MYAPP_UPLOAD_KEY_ALIAS=\(appName.lowercased())
+MYAPP_UPLOAD_STORE_PASSWORD=12345678
+MYAPP_UPLOAD_KEY_PASSWORD=12345678
 """
-                    var replacedString = fileContents.replacingOccurrences(of: stringToReplace, with: replacementString)
-                    
-                    stringToReplace = "signingConfig signingConfigs.debug"
-                    replacementString = "signingConfig signingConfigs.release"
-                    
-                    replacedString = replacedString.replacingOccurrences(of: stringToReplace, with: replacementString)
-                    
+                    let replacedString = fileContents.replacingOccurrences(of: stringToReplace, with: replacementString)
                     do {
                         try replacedString.write(to: fileURL, atomically: true, encoding: .utf8)
                         success = true
