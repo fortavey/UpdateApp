@@ -26,23 +26,33 @@ struct Section01OpenApp: View {
                     .resizable()
                     .frame(width: 20, height: 20)
             }
-            Text("Запуск приложение на компьютере - \(app.devComp)")
+            Text("Создание приложения")
                 .font(.title)
-            
-            VStack(alignment: .leading) {
-                Text("Перемещаем приложение в корень и запускаем его")
-                CopyTextView(text: "cd ~/Apps")
-                CopyTextView(text: "mv \(app.firstAppName) ~/")
-                CopyTextView(text: "cd ~/\(app.firstAppName)")
-                CopyTextView(text: "npm i")
-                CopyTextView(text: "open -a /Applications/Android\\ Studio.app")
-                CopyTextView(text: "npx react-native start")
+            HStack {
+                Text("Открываем терминал. Удостоверится что выбрана корневая папка")
+                CopyTextView(text: "cd ~")
                 Spacer()
             }
+            Text("Вводим команду создания нового приложения:")
+            CopyTextView(text: "npx @react-native-community/cli@latest init \(app.firstAppName)")
+            Text("Дожидаемся окончания процесса")
+            
+            Text("Первый запуск приложения")
+                .font(.title)
             HStack {
-                Text("В Android studio находим приложение ")
-                CopyTextView(text: "\(app.firstAppName)")
-                Text(" и запускаем его")
+                Text("Работа в терминале. Переходим в папку только что созданного приложения")
+                CopyTextView(text: "cd \(app.firstAppName)")
+                Spacer()
+            }
+            Text("Вводим команду запуска приложения:")
+            CopyTextView(text: "npx react-native start")
+            
+            Text("Запуск приложения в Andriod Studio")
+                .font(.title)
+            
+            HStack {
+                Text("Запуск через терминал. Вводим команду")
+                CopyTextView(text: "open -a /Applications/Android\\ Studio.app")
                 Spacer()
             }
             

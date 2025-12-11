@@ -16,6 +16,7 @@ struct TaskWebViewModel: Identifiable {
     var createAccount: String
     var transferAccount: String
     var creoLink: String
+    var devLink: String
     var webviewDomain: String
     var devComp: String
     var isDone: Bool
@@ -36,6 +37,7 @@ struct TaskWebViewModel: Identifiable {
                 let createAccount = doc["createAccount"] as? String
                 let transferAccount = doc["transferAccount"] as? String
                 let creoLink = doc["creoLink"] as? String
+                let devLink = doc["devLink"] as? String
                 let webviewDomain = doc["webviewDomain"] as? String
                 let devComp = doc["devComp"] as? String
                 let isDone = doc["isDone"] as? Bool
@@ -49,6 +51,7 @@ struct TaskWebViewModel: Identifiable {
                         createAccount: createAccount ?? "",
                         transferAccount: transferAccount ?? "",
                         creoLink: creoLink ?? "",
+                        devLink: devLink ?? "",
                         webviewDomain: webviewDomain ?? "",
                         devComp: devComp ?? "",
                         isDone: isDone ?? false

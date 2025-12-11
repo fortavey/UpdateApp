@@ -21,7 +21,7 @@ struct ContentView: View {
                 }
                 Spacer()
             }
-            List(mainVM.tasksWEBList.filter{ $0.devComp == MainConfig.comp && $0.isDone == false }){ app in
+            List(mainVM.tasksWEBList.filter{ $0.isDone == false }){ app in
                 HStack{
                     LineItemView(text: app.appId, width: 150)
                     LineItemView(text: app.newAppName, width: 150)
