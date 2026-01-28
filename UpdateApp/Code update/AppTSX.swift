@@ -22,7 +22,7 @@ struct AppTSX: View {
             Button("App.tsx"){
                 start()
             }
-            .alert("Ошибка изменения файла", isPresented: $showAlert) {
+            .alert("Ошибка изменения файла.", isPresented: $showAlert) {
                 Button("Закрыть", role: .cancel) {}
             }
         }
