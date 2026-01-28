@@ -11,6 +11,7 @@ import Cocoa
 struct Section05Final: View {
     var app: TaskWebViewModel
     @Binding var sections: [Int]
+    @State private var isFilesExistError: Bool = false
     var index: Int
     
     var body: some View {
@@ -38,15 +39,21 @@ struct Section05Final: View {
             }
             
             HStack{
-                Text("Меняем название приложения: ")
-                CopyTextView(text: app.newAppName)
-            }
-            
-            
-            HStack{
                 Text("Собираем билд")
                     .font(.title2)
-                CopyTextView(text: "npx react-native build-android --mode=release")
+            }
+            Button("Собрать билд"){
+                let fileManager = FileManager.default
+                let filePath = "\(NSHomeDirectory())/\(app.firstAppName)/android/app/src/main/res/mipmap-hdpi/ic_launcher_foreground.webp"
+
+                if fileManager.fileExists(atPath: filePath) {
+                    Helpers().openTerminal(content: "cd \(app.firstAppName) \nnpx react-native build-android --mode=release")
+                }else {
+                    isFilesExistError = true
+                }
+            }
+            .alert("Не изменена иконка в приложении", isPresented: $isFilesExistError) {
+                Button("Закрыть", role: .cancel) {}
             }
             
             Button("Открыть папку с билдом"){
@@ -59,6 +66,11 @@ struct Section05Final: View {
                 Text(" на аккаунт - ")
                 CopyTextView(text: app.createAccount)
                 Spacer()
+            }
+            
+            HStack{
+                Text("Меняем название приложения: ")
+                CopyTextView(text: app.newAppName)
             }
             
             DefaultButtonView(title: "Готово") {

@@ -7,19 +7,21 @@
 
 import SwiftUI
 
-struct Section03Server: View {
+struct Section05Server: View {
     var app: TaskWebViewModel
     @State private var isPresented: Bool = false
     @Binding var sections: [Int]
     @State private var isFailure: Bool = false
     @State private var isDate: Bool = false
+    @State private var isFilesExistError: Bool = false
+    @State private var isFirebaseExist: Bool = false
     var index: Int
     
     var body: some View {
         VStack(alignment: .leading) {
             HStack{
                 Spacer()
-                Image(systemName: "03.square")
+                Image(systemName: "05.square")
                     .resizable()
                     .frame(width: 20, height: 20)
             }
@@ -41,13 +43,33 @@ struct Section03Server: View {
                 CopyTextView(text: "\(app.appId)")
             }
             Text("Перемещаем файл google-services.json в app")
-            Button("Открыть папку app"){
-                openFinder(at: "/Users/\(NSUserName())/\(app.firstAppName)/android/app")
+            Button("Переместить файл"){
+                let fileManager = FileManager.default
+                let filePath = "/Users/\(NSUserName())/Downloads/google-services.json"
+
+                if fileManager.fileExists(atPath: filePath) {
+                    do {
+                        try fileManager.moveItem(atPath: "/Users/\(NSUserName())/Downloads/google-services.json", toPath: "/Users/\(NSUserName())/\(app.firstAppName)/android/app/google-services.json")
+                        isFirebaseExist = isFirebaseFileExist()
+                    }catch {
+                        print("Error moving icon: \(error)")
+                    }
+                }else {
+                    isFilesExistError = true
+                }
+            }
+            .alert("Файл google-services.json отсутствует в Загрузках", isPresented: $isFilesExistError) {
+                Button("Закрыть", role: .cancel) {}
+            }
+            .onAppear{
+                isFirebaseExist = isFirebaseFileExist()
             }
             
-            HStack{
-                Text("Дата увеличена на год?")
-                Button("Да"){ isDate = true }
+            if isFirebaseExist {
+                HStack{
+                    Text("Дата увеличена на год?")
+                    Button("Да"){ isDate = true }
+                }
             }
             
             if isDate {
@@ -75,6 +97,16 @@ struct Section03Server: View {
             }
         }
         .sectionModifiers()
+    }
+    
+    func isFirebaseFileExist() -> Bool {
+        let fileManager = FileManager.default
+        let filePath = "/Users/\(NSUserName())/\(app.firstAppName)/android/app/google-services.json"
+        
+        if fileManager.fileExists(atPath: filePath) {
+            return true
+        }
+        return false
     }
     
     func openFinder(at path: String) {

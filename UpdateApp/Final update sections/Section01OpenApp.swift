@@ -6,17 +6,12 @@
 //
 
 import SwiftUI
-import Cocoa
 
 struct Section01OpenApp: View {
     var app: TaskWebViewModel
+    @State private var showAlert = false
     @Binding var sections: [Int]
     var index: Int
-    
-    func openFinder(at path: String) {
-        let url = URL(fileURLWithPath: path)
-        NSWorkspace.shared.open(url)
-    }
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -28,38 +23,29 @@ struct Section01OpenApp: View {
             }
             Text("Создание приложения")
                 .font(.title)
-            HStack {
-                Text("Открываем терминал. Удостоверится что выбрана корневая папка")
-                CopyTextView(text: "cd ~")
-                Spacer()
-            }
-            Text("Вводим команду создания нового приложения:")
-            CopyTextView(text: "npx @react-native-community/cli@latest init \(app.firstAppName)")
-            Text("Дожидаемся окончания процесса")
-            
-            Text("Первый запуск приложения")
-                .font(.title)
-            HStack {
-                Text("Работа в терминале. Переходим в папку только что созданного приложения")
-                CopyTextView(text: "cd \(app.firstAppName)")
-                Spacer()
-            }
-            Text("Вводим команду запуска приложения:")
-            CopyTextView(text: "npx react-native start")
-            
-            Text("Запуск приложения в Andriod Studio")
-                .font(.title)
-            
-            HStack {
-                Text("Запуск через терминал. Вводим команду")
-                CopyTextView(text: "open -a /Applications/Android\\ Studio.app")
-                Spacer()
+
+            Button("Создать"){
+                Helpers().openTerminal(content: "npx @react-native-community/cli@latest init \(app.firstAppName)")
             }
             
             DefaultButtonView(title: "Готово") {
-                sections.append(index+1)
+                if !isAppCreated() {
+                    showAlert = true
+                }else {
+                    sections.append(index+1)
+                }
+            }
+            .alert(isPresented: $showAlert) {
+                Alert(
+                    title: Text("Ошибка"),
+                    message: Text("Приложение не создано")
+                )
             }
         }
         .sectionModifiers()
+    }
+    
+    func isAppCreated() -> Bool {
+        FileManager.default.fileExists(atPath: "/Users/MiniA/\(app.firstAppName)")
     }
 }

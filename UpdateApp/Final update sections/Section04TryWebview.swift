@@ -27,6 +27,14 @@ struct Section04TryWebview: View {
                 Spacer()
             }
             
+            Button("Запустить Metro"){
+                Helpers().openTerminal(content: "cd \(app.firstAppName) \nnpx react-native start")
+            }
+            
+            Button("Открыть Android Studio"){
+                Helpers().openTerminal(content: "open -a /Applications/Android\\ Studio.app")
+            }
+            
             DefaultButtonView(title: "Готово") {
                 sections.append(index+1)
             }

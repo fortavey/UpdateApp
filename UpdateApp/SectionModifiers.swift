@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import SwiftUICore
+import SwiftUI
 
 struct SectionModifiers: ViewModifier {
     func body(content: Content) -> some View {
