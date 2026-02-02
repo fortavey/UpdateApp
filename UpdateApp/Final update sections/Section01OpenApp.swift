@@ -46,6 +46,6 @@ struct Section01OpenApp: View {
     }
     
     func isAppCreated() -> Bool {
-        FileManager.default.fileExists(atPath: "/Users/MiniA/\(app.firstAppName)")
+        FileManager.default.fileExists(atPath: "/Users/\(NSUserName())/\(app.firstAppName)")
     }
 }
