@@ -44,8 +44,6 @@ import analytics from '@react-native-firebase/analytics';
 import firestore from '@react-native-firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { PlayInstallReferrer } from 'react-native-play-install-referrer';
-import {PermissionsAndroid} from 'react-native';
-PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
 
 const WebScreen = ({setShowWeb, webLink}) => {
 const webViewRef = useRef()
