@@ -75,11 +75,11 @@ struct Section05Server: View {
             if isDate {
                 HStack{
                     Text("Collection ID: ")
-                    CopyTextView(text: "links")
+                    CopyTextView(text: "trackers")
                 }
                 HStack{
                     Text("Document ID: ")
-                    CopyTextView(text: "linkObj")
+                    CopyTextView(text: "trackerObj")
                 }
                 HStack{
                     Text("Field: ")

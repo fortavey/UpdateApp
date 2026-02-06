@@ -108,7 +108,7 @@ function App() {
     const [installReferrer, setInstallReferrer] = useState('')
 
     async function getFirebase(){
-        const linksCollection = await firestore().collection('links').doc('linkObj').get();
+        const linksCollection = await firestore().collection('trackers').doc('trackerObj').get();
         const link = await linksCollection.data().link
         const aso = await linksCollection.data().aso
         const uac = await linksCollection.data().uac
@@ -227,7 +227,7 @@ function App() {
     }
 
     async function sendGclidListRequests(){
-        const linksCollection = await firestore().collection('links').doc('linkObj').get();
+        const linksCollection = await firestore().collection('trackers').doc('trackerObj').get();
         const gclids = await linksCollection.data().gclids
         gclids ? setGclids(gclids) : setGclids(null)
         const timeOutId = setTimeout(() => {
