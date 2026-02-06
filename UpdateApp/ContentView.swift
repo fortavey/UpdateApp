@@ -3,7 +3,7 @@
 //  UpdateApp
 //
 //  Created by Main on 26.07.2025.
-//
+//  Update 06.02.2026
 
 import SwiftUI
 
