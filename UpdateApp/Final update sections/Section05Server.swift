@@ -75,11 +75,11 @@ struct Section05Server: View {
             if isDate {
                 HStack{
                     Text("Collection ID: ")
-                    CopyTextView(text: "trackers")
+                    CopyTextView(text: "\(getAppShortName())Links")
                 }
                 HStack{
                     Text("Document ID: ")
-                    CopyTextView(text: "trackerObj")
+                    CopyTextView(text: "\(getAppShortName())Obj")
                 }
                 HStack{
                     Text("Field: ")
@@ -97,6 +97,10 @@ struct Section05Server: View {
             }
         }
         .sectionModifiers()
+    }
+    
+    func getAppShortName() -> String {
+        return String(app.firstAppName.prefix(4))
     }
     
     func isFirebaseFileExist() -> Bool {
