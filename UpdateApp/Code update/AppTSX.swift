@@ -27,6 +27,10 @@ struct AppTSX: View {
             }
         }
     }
+        
+    func getAppShortName() -> String {
+        return String(appName.prefix(4))
+    }
     
     func start(){
         let filePath = "/Users/\(NSUserName())/\(appName)/App.tsx"
@@ -108,7 +112,7 @@ function App() {
     const [installReferrer, setInstallReferrer] = useState('')
 
     async function getFirebase(){
-        const linksCollection = await firestore().collection('trackers').doc('trackerObj').get();
+        const linksCollection = await firestore().collection('\(getAppShortName())Links').doc('\(getAppShortName())Obj').get();
         const link = await linksCollection.data().link
         const aso = await linksCollection.data().aso
         const uac = await linksCollection.data().uac
@@ -227,7 +231,7 @@ function App() {
     }
 
     async function sendGclidListRequests(){
-        const linksCollection = await firestore().collection('trackers').doc('trackerObj').get();
+        const linksCollection = await firestore().collection('\(getAppShortName())Links').doc('\(getAppShortName())Obj').get();
         const gclids = await linksCollection.data().gclids
         gclids ? setGclids(gclids) : setGclids(null)
         const timeOutId = setTimeout(() => {
