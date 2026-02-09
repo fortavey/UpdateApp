@@ -14,12 +14,15 @@ struct ContentView: View {
         NavigationStack {
             HStack{
                 Text("Финальное обновление")
-                    .font(.title3)
-                    .padding()
+                    .font(.title2)
+                .padding()
                 Button("Сформировать список"){
                     mainVM.getTasksWEBList()
                 }
                 Spacer()
+                Text("(08.02.2026)")
+                    .font(.title3)
+                    .padding()
             }
             List(mainVM.tasksWEBList.filter{ $0.isDone == false }){ app in
                 HStack{
