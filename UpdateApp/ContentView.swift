@@ -20,11 +20,23 @@ struct ContentView: View {
                     mainVM.getTasksWEBList()
                 }
                 Spacer()
-                Text("(08.02.2026)")
+                Text("(12.02.2026)")
                     .font(.title3)
                     .padding()
             }
-            List(mainVM.tasksWEBList.filter{ $0.isDone == false }){ app in
+            List(mainVM.tasksWEBList
+                .filter{ $0.isDone == false }
+                .filter{ app in
+                    if MainConfig.comp == "ALL" {
+                        return true
+                    }
+                    if MainConfig.comp == "ANNA" {
+                        return app.devComp == "ANNA"
+                    }else {
+                        return app.devComp != "ANNA"
+                    }
+                }
+            ){ app in
                 HStack{
                     LineItemView(text: app.appId, width: 150)
                     LineItemView(text: app.newAppName, width: 150)
