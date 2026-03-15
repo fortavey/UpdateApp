@@ -12,8 +12,6 @@ struct Section05Final: View {
     var app: TaskWebViewModel
     @Binding var sections: [Int]
     @State private var isFilesExistError: Bool = false
-    @State private var isBuildExistError: Bool = false
-    @State private var showDoneButton: Bool = false
     var index: Int
     
     var body: some View {
@@ -59,19 +57,7 @@ struct Section05Final: View {
             }
             
             Button("Открыть папку с билдом"){
-                let fileManager = FileManager.default
-                let filePath = "/Users/\(NSUserName())/\(app.firstAppName)/android/app/build/outputs/bundle/release"
-                
-                if fileManager.fileExists(atPath: filePath) {
-                    openFinder(at: filePath)
-                    showDoneButton = true
-                }else {
-                    isBuildExistError = true
-                }
-                
-            }
-            .alert("Билд пока еще не собран", isPresented: $isBuildExistError) {
-                Button("Закрыть", role: .cancel) {}
+                openFinder(at: "/Users/\(NSUserName())/\(app.firstAppName)/android/app/build/outputs/bundle/release")
             }
             
             HStack {
@@ -87,10 +73,8 @@ struct Section05Final: View {
                 CopyTextView(text: app.newAppName)
             }
             
-            if showDoneButton {
-                DefaultButtonView(title: "Готово") {
-                    sections.append(index+1)
-                }
+            DefaultButtonView(title: "Готово") {
+                sections.append(index+1)
             }
         }
         .sectionModifiers()

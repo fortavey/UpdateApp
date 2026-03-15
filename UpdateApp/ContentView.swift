@@ -18,11 +18,20 @@ struct ContentView: View {
                 .padding()
                 Button("Сформировать список"){
                     mainVM.getTasksWEBList()
+                    mainVM.getUpdatedList()
                 }
                 Spacer()
-                Text("(12.02.2026)")
-                    .font(.title3)
-                    .padding()
+                VStack{
+                    Text("(Update 15.03.2026)")
+                        .font(.title3)
+                        .padding(.horizontal, 20)
+                    Text("Приложений за \(mainVM.month) - \(mainVM.updatedList.count) шт")
+                        .padding(.horizontal, 20)
+                    Text("(\(mainVM.updatedList.count * 100)р)")
+                        .padding(.horizontal, 20)
+                    
+                }
+                
             }
             List(mainVM.tasksWEBList
                 .filter{ $0.isDone == false }
@@ -32,9 +41,11 @@ struct ContentView: View {
                     }
                     if MainConfig.comp == "ANNA" {
                         return app.devComp == "ANNA"
-                    }else {
-                        return app.devComp != "ANNA"
                     }
+                    if MainConfig.comp == "KRIS" {
+                        return app.devComp == "KRIS"
+                    }
+                    return false
                 }
             ){ app in
                 HStack{

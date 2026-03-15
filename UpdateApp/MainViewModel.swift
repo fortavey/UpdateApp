@@ -24,6 +24,27 @@ struct TaskWebViewModel: Identifiable {
 
 @Observable class MainViewModel {
     var tasksWEBList: [TaskWebViewModel] = []
+    var updatedList: Set<String> = []
+    var month: String = ""
+    
+    func getUpdatedList(){
+        FirebaseServices().getDocuments(collection: "updatedApps") { docs in
+            var array: Set<String> = []
+                        
+            docs.forEach{doc in
+                let id = doc.documentID
+                let list = doc["list"] as? [String]
+                let month = doc["month"] as? String
+                
+                if id == MainConfig.comp {
+                    array = Set(list ?? [])
+                    self.month = month ?? ""
+                }
+            }
+            print(array)
+            self.updatedList = array
+        }
+    }
     
     func getTasksWEBList(){
         FirebaseServices().getDocuments(collection: "taskwebview") { docs in

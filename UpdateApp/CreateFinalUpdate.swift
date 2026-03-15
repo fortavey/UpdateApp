@@ -12,6 +12,7 @@ struct CreateFinalUpdate: View {
     @State private var sections: [Int] = [1]
     var app: TaskWebViewModel
     var mainVM: MainViewModel
+    @State private var isDisabled: Bool = false
     
     var body: some View {
         VStack {
@@ -31,31 +32,15 @@ struct CreateFinalUpdate: View {
                             .font(.title)
                         
                         Button {
-                            FirebaseServices().updateDocument(id: app.id,
-                                                              collection: "apps",
-                                                              fields: ["isUACReady" : true]) { result in
-                                if result {
-                                    
-                                }else {
-                                    print("Ошибка обновления готовности UAC")
-                                }
-                            }
-                            FirebaseServices().updateDocument(id: app.id,
-                                                              collection: "taskwebview",
-                                                              fields: ["isDone" : true]) { result in
-                                if result {
-                                    mainVM.getTasksWEBList()
-                                    self.presentationMode.wrappedValue.dismiss()
-                                }else {
-                                    print("Ошибка обновления трастового аккаунта")
-                                }
-                            }
+                            isDisabled = true
+                            setIsDoneFire()
                         } label: {
                             Text("Готово")
                         }
                         .frame(height: 50)
                         .padding()
                         .padding(.bottom, 30)
+                        .disabled(isDisabled)
                         
                     }
                 }
@@ -63,6 +48,35 @@ struct CreateFinalUpdate: View {
             }
             .padding()
             .frame(maxWidth: .infinity, maxHeight: .infinity)
+        }
+    }
+    
+    func setIsDoneFire(){
+        FirebaseServices().updateDocument(id: app.id,
+                                          collection: "taskwebview",
+                                          fields: ["isDone" : true]) { result in
+            if result {
+                mainVM.updatedList.insert(app.firstAppName)
+                addAppNameFire()
+            }else {
+                print("Ошибка обновления трастового аккаунта")
+                isDisabled = false
+            }
+        }
+    }
+    
+    func addAppNameFire(){
+        FirebaseServices().updateDocument(id: MainConfig.comp,
+                                          collection: "updatedApps",
+                                          fields: ["list" : Array(mainVM.updatedList)]) { result in
+            if result {
+                mainVM.getTasksWEBList()
+                mainVM.getUpdatedList()
+                self.presentationMode.wrappedValue.dismiss()
+            }else {
+                print("Ошибка обновления готовности UAC")
+                isDisabled = false
+            }
         }
     }
 }
