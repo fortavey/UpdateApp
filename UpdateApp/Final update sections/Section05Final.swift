@@ -22,35 +22,22 @@ struct Section05Final: View {
                     .resizable()
                     .frame(width: 20, height: 20)
             }
-            Text("Добавляем иконку, меняем название, заливаем билд")
+            Text("Заливаем билд")
                 .font(.title)
-            Text("Добавляем иконку")
-                .font(.title3)
-            
-            if let link = URL(string: app.creoLink) {
-                Link(destination: link) {
-                    HStack{
-                        Text("Открыть Google Диск")
-                        Image("GoogleDriveIcon")
-                            .resizable()
-                            .frame(width: 17, height: 17)
-                    }
-                }
-            }
             
             HStack{
                 Text("Собираем билд")
                     .font(.title2)
             }
             Button("Собрать билд"){
-                let fileManager = FileManager.default
-                let filePath = "\(NSHomeDirectory())/\(app.firstAppName)/android/app/src/main/res/mipmap-hdpi/ic_launcher_foreground.webp"
-
-                if fileManager.fileExists(atPath: filePath) {
+//                let fileManager = FileManager.default
+//                let filePath = "\(NSHomeDirectory())/\(app.firstAppName)/android/app/src/main/res/mipmap-hdpi/ic_launcher_foreground.webp"
+//
+//                if fileManager.fileExists(atPath: filePath) {
                     Helpers().openTerminal(content: "cd \(app.firstAppName) \nnpx react-native build-android --mode=release")
-                }else {
-                    isFilesExistError = true
-                }
+//                }else {
+//                    isFilesExistError = true
+//                }
             }
             .alert("Не изменена иконка в приложении", isPresented: $isFilesExistError) {
                 Button("Закрыть", role: .cancel) {}

@@ -25,8 +25,9 @@ struct CreateFinalUpdate: View {
                 if sections.contains(4) {Section04VSCode(app: app, sections: $sections, index: 4)}
                 if sections.contains(5) {Section05Server(app: app, sections: $sections, index: 5)}
                 if sections.contains(6) {Section04TryWebview(app: app, sections: $sections, index: 6)}
-                if sections.contains(7) {Section05Final(app: app, sections: $sections, index: 7)}
-                if sections.contains(8) {
+                if sections.contains(7) {Section04AddIcon(appName: app.firstAppName, app: app, sections: $sections, index: 7)}
+                if sections.contains(8) {Section05Final(app: app, sections: $sections, index: 8)}
+                if sections.contains(9) {
                     VStack{
                         Text("Завершение обновления приложения")
                             .font(.title)
