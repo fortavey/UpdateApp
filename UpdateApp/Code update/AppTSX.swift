@@ -46,8 +46,6 @@ import WebView from 'react-native-webview';
 import App1 from './App1';
 import analytics from '@react-native-firebase/analytics';
 import firestore from '@react-native-firebase/firestore';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { PlayInstallReferrer } from 'react-native-play-install-referrer';
 
 const WebScreen = ({setShowWeb, webLink}) => {
 const webViewRef = useRef()
@@ -105,152 +103,28 @@ console.log(err);
 function App() {
     const [showWeb, setShowWeb] = useState(null)
     const [webLink, setWebLink] = useState('')
-    const [webDefaultLink, setWebDefaultLink] = useState('')
-    const [webASO, setWebASO] = useState('')
-    const [webUAC, setWebUAC] = useState('')
-    const [gclids, setGclids] = useState(null)
-    const [installReferrer, setInstallReferrer] = useState('')
 
     async function getFirebase(){
         const linksCollection = await firestore().collection('\(getAppShortName())Links').doc('\(getAppShortName())Obj').get();
         const link = await linksCollection.data().link
-        const aso = await linksCollection.data().aso
-        const uac = await linksCollection.data().uac
-        const gclids = await linksCollection.data().gclids
-        setGclids(gclids)
-        if(link) setWebDefaultLink(link)
-        if(aso) setWebASO(aso)
-        if(uac) setWebUAC(uac)
-        if(!link && !aso && !uac) {
+        if(link) {
+          setShowWeb(true)
+          setWebLink(link)
+        }
+        if(!link) {
             setShowWeb(false)
-        }else {
-            getData()
         }
     }
-
-    const getInstallReferrer = async () => {
-        await PlayInstallReferrer.getInstallReferrerInfo((installReferrerInfo, error) => {
-          if (!error) {
-            setInstallReferrer(installReferrerInfo.installReferrer);
-            storeData(installReferrerInfo.installReferrer)
-          } else {
-            console.log("Failed to get install referrer info!");
-          }
-        });
-    }
-
-    const storeData = async (value) => {
-      try {
-        await AsyncStorage.setItem('installReferrer', value);
-      } catch (e) {
-        console.log("Error - ", e)
-      }
-    };
-
-    const getData = async () => {
-      try {
-        const value = await AsyncStorage.getItem('installReferrer');
-        if (value !== null) {
-            setInstallReferrer(value)
-        }else {
-            getInstallReferrer()
-        }
-      } catch (e) {
-        console.log("Error - ", e)
-      }
-    };
 
     useEffect(() => {
         getFirebase()
-        sendGclidListRequests()
     }, [])
-
-    useEffect(() => {
-        if (installReferrer) {
-            const regex = /gclid=/;
-            let match = regex.test(installReferrer);
-            if(match && webUAC){
-                const gclid = getGclidFromReferer()
-                let newLink = webUAC
-                newLink = newLink.replace('{gclid}', `{${gclid}}`)
-                gclid ? setWebLink(newLink) : setWebLink(webUAC)                
-            }else if(match && webASO){
-                setWebLink(webASO)
-            }else if(webASO){
-                setWebLink(webASO)
-            }else {
-                setWebLink(webDefaultLink)
-            }
-        }
-    }, [installReferrer])
 
     useEffect(() => {
         if (webLink) {
             setShowWeb(true)
         }
     }, [webLink])
-
-    useEffect(() => {
-      if(gclids && isGclidExistInList()) {
-        purchaseEvent()
-      }
-    }, [gclids])
-
-    const storeEvent = async () => {
-      try {
-        await AsyncStorage.setItem('purchaseEvent', '1');
-      } catch (e) {
-        console.log("Error - ", e)
-      }
-    };
-
-    const purchaseEvent = async () => {
-      try {
-        const value = await AsyncStorage.getItem('purchaseEvent');
-        if (value == null) {
-            await analytics().logPurchase({
-              currency: 'EUR',
-              value: 10,
-              transaction_id: getGclidFromReferer(),
-              items: [
-                {
-                  item_id: getGclidFromReferer(),
-                  item_name: 'Dep',
-                  price: 10,
-                  quantity: 1,
-                },
-              ],
-            });
-            storeEvent()
-            
-        }
-      } catch (e) {
-        console.log(e);
-        
-      }
-    }
-
-    async function sendGclidListRequests(){
-        const linksCollection = await firestore().collection('\(getAppShortName())Links').doc('\(getAppShortName())Obj').get();
-        const gclids = await linksCollection.data().gclids
-        gclids ? setGclids(gclids) : setGclids(null)
-        const timeOutId = setTimeout(() => {
-          sendGclidListRequests()
-          clearTimeout(timeOutId)
-        }, 60000)
-    }
-
-    const isGclidExistInList = () => {      
-      if(gclids) return gclids.includes(getGclidFromReferer())
-      return false
-    }
-
-    const getGclidFromReferer = () => {
-      let gclid = installReferrer.split('gclid=')[1]
-      if(gclid) gclid = gclid.split('&')[0]
-
-      return gclid || 'NoGclid'
-    }
 
     const renderView = () => {
         if (showWeb == null) {
