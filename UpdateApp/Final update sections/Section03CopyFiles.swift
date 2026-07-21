@@ -58,16 +58,17 @@ struct Section03CopyFiles: View {
                 Button("Переместить файл ключа"){
                     isComplete = true
                     let fileManager = FileManager.default
-                    let filePath = "/Users/\(NSUserName())/Downloads/\(appName.lowercased()).keystore"
-
-                    if fileManager.fileExists(atPath: filePath) {
-                        do {
-                            try FileManager.default.moveItem(atPath: "/Users/\(NSUserName())/Downloads/\(appName.lowercased()).keystore", toPath: "/Users/\(NSUserName())/\(appName)/android/app/\(appName.lowercased()).keystore")
-                        }catch {
-                            print("Error moving icon: \(error)")
+                    let folderURL = URL(fileURLWithPath: "/Users/\(NSUserName())/Downloads")
+                    
+                    do {
+                        let fileURLs = try fileManager.contentsOfDirectory(at: folderURL, includingPropertiesForKeys: nil)
+                        for fileURL in fileURLs {
+                            if fileURL.pathExtension == "keystore" {
+                                try fileManager.moveItem(atPath: fileURL.path, toPath: "/Users/\(NSUserName())/\(appName)/android/app/\(fileURL.pathComponents.last!)")
+                            }
                         }
-                    }else {
-                        isFilesExistError = true
+                    } catch {
+                        print("Ошибка: \(error)")
                     }
                 }
                 .alert("Файл ключей не существует", isPresented: $isFilesExistError) {
@@ -84,6 +85,22 @@ struct Section03CopyFiles: View {
             Spacer()
         }
         .sectionModifiers()
+    }
+    
+    func removeKeystoreFilesFromDownloads() {
+        let fileManager = FileManager.default
+        let folderURL = URL(fileURLWithPath: "/Users/\(NSUserName())/Downloads")
+        
+        do {
+            let fileURLs = try fileManager.contentsOfDirectory(at: folderURL, includingPropertiesForKeys: nil)
+            for fileURL in fileURLs {
+                if fileURL.pathExtension == "keystore" {
+                    try fileManager.removeItem(at: fileURL)
+                }
+            }
+        } catch {
+            print("Ошибка: \(error)")
+        }
     }
     
     func isFilesMoved() -> Bool {

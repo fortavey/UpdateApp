@@ -22,7 +22,7 @@ struct ContentView: View {
                 }
                 Spacer()
                 VStack{
-                    Text("(Update 03.07.2026)")
+                    Text("(Update 21.07.2026)")
                         .font(.title3)
                         .padding(.horizontal, 20)
                     Text("Приложений за \(mainVM.month) - \(mainVM.updatedList.count) шт")

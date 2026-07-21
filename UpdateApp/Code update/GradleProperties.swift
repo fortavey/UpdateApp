@@ -30,6 +30,7 @@ struct GradleProperties: View {
     
     func start(){
         let filePath = "/Users/\(NSUserName())/\(appName)/android/gradle.properties"
+        let keystoreFileName = getKeystoreFileName()
         
         if fileManager.fileExists(atPath: filePath) {
             
@@ -62,15 +63,15 @@ android.enableJetifier=true
                 let fileURL = URL(fileURLWithPath: filePath)
                 let fileData = try Data(contentsOf: fileURL)
                 if let fileContents = String(data: fileData, encoding: .utf8) {
-                    if fileContents.contains("MYAPP_UPLOAD_STORE_FILE=\(appName.lowercased()).keystore") {
+                    if fileContents.contains("MYAPP_UPLOAD_STORE_FILE=\(keystoreFileName)") {
                         success = true
                         return
                     }
                     let stringToReplace = "# Project-wide Gradle settings."
                     let replacementString = """
 # Project-wide Gradle settings.
-MYAPP_UPLOAD_STORE_FILE=\(appName.lowercased()).keystore
-MYAPP_UPLOAD_KEY_ALIAS=\(appName.lowercased())
+MYAPP_UPLOAD_STORE_FILE=\(keystoreFileName)
+MYAPP_UPLOAD_KEY_ALIAS=\(getKeystoreAlias(keystoreFileName))
 MYAPP_UPLOAD_STORE_PASSWORD=12345678
 MYAPP_UPLOAD_KEY_PASSWORD=12345678
 """
@@ -89,5 +90,27 @@ MYAPP_UPLOAD_KEY_PASSWORD=12345678
         } else {
             showAlert = true
         }
+    }
+    
+    func getKeystoreFileName() -> String {
+        let fileManager = FileManager.default
+        let folderURL = URL(fileURLWithPath: "/Users/\(NSUserName())/\(appName)/android/app")
+        var res = ""
+        
+        do {
+            let fileURLs = try fileManager.contentsOfDirectory(at: folderURL, includingPropertiesForKeys: nil)
+            for fileURL in fileURLs {
+                if fileURL.pathExtension == "keystore" && !fileURL.pathComponents.last!.contains("debug") {
+                    res = fileURL.pathComponents.last!
+                }
+            }
+        } catch {
+            print("Ошибка: \(error)")
+        }
+        return res
+    }
+    
+    func getKeystoreAlias(_ keystoreFileName: String) -> String {
+        return String(keystoreFileName.split(separator: ".").first!)
     }
 }
