@@ -30,7 +30,7 @@ struct Section02InstallDeps: View {
             
             DefaultButtonView(title: "Готово") {
                 let filePath = "/Users/\(NSUserName())/\(appName)/package.json"
-                let isDone = Helpers().isFileHasContent(filePath: filePath, searchString: "@react-navigation/native")
+                let isDone = Helpers().isFileHasContent(filePath: filePath, searchString: "@react-native-firebase")
                 
                 if isDone {
                     sections.append(index+1)

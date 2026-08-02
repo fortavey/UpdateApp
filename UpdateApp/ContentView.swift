@@ -61,9 +61,7 @@ struct ContentView: View {
                         } icon: {
                             Image(systemName: "arrow.right.square")
                         }
-                        
                     }
-                    
                 }
             }
         }
