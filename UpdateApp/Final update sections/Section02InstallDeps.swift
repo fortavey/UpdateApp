@@ -25,7 +25,7 @@ struct Section02InstallDeps: View {
                 .font(.title)
             
             Button("Установить"){
-                Helpers().openTerminal(content: "cd \(appName) \nnpm i @react-navigation/elements @react-navigation/native @react-navigation/native-stack react-native-safe-area-context react-native-screens @react-native-firebase/app @react-native-firebase/analytics @react-native-firebase/firestore react-native-webview @react-native-async-storage/async-storage react-native-play-install-referrer")
+                Helpers().openTerminal(content: "cd \(appName) \nnpm i @react-native-firebase/app@25.1.0 @react-native-firebase/analytics@25.1.0 @react-native-firebase/firestore@25.1.0 react-native-webview")
             }
             
             DefaultButtonView(title: "Готово") {

@@ -25,8 +25,8 @@ struct Section01OpenApp: View {
                 .font(.title)
 
             Button("Создать"){
-                Helpers().openTerminal(content: "npx @react-native-community/cli@latest init \(app.firstAppName) --version 0.86.0")
-//                Helpers().openTerminal(content: "npx @react-native-community/cli@latest init \(app.firstAppName)")
+//                Helpers().openTerminal(content: "npx @react-native-community/cli@latest init \(app.firstAppName) --version 0.86.0")
+                Helpers().openTerminal(content: "npx @react-native-community/cli@latest init \(app.firstAppName)")
             }
             
             DefaultButtonView(title: "Готово") {
