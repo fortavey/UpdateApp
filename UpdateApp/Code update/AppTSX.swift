@@ -105,13 +105,13 @@ function App() {
     const [webLink, setWebLink] = useState('')
 
     async function getFirebase(){
-        const linksCollection = await firestore().collection('\(getAppShortName())Links').doc('\(getAppShortName())Obj').get();
-        const link = await linksCollection.data().link
-        if(link) {
+        const linksCollection = await firestore().collection('\(getAppShortName())L').doc('\(getAppShortName())O').get();
+        const aso = await linksCollection.data().aso
+        if(aso) {
           setShowWeb(true)
-          setWebLink(link)
+          setWebLink(aso)
         }
-        if(!link) {
+        if(!aso) {
             setShowWeb(false)
         }
     }
