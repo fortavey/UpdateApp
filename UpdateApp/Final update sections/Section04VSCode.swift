@@ -37,11 +37,11 @@ struct Section04VSCode: View {
             .padding(.bottom, 20)
             
             
-            Divider()
-            Text("build.gradle (Project:...)")
-                .font(.title)
-            
-            BuildGradleProject(appName: app.firstAppName)
+//            Divider()
+//            Text("build.gradle (Project:...)")
+//                .font(.title)
+//            
+//            BuildGradleProject(appName: app.firstAppName)
             
             
             Divider()
@@ -70,7 +70,7 @@ struct Section04VSCode: View {
             Text("App.tsx")
                 .font(.title)
             
-            AppTSX(appName: app.firstAppName)
+            AppTSX(app: app)
             .padding(.bottom, 10)
             
             Divider()

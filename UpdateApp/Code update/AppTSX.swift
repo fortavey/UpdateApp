@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct AppTSX: View {
-    var appName: String
+    var app: TaskWebViewModel
     var fileManager: FileManager = .default
     @State private var showAlert: Bool = false
     @State private var success: Bool = false
@@ -29,11 +29,11 @@ struct AppTSX: View {
     }
         
     func getAppShortName() -> String {
-        return String(appName.prefix(4))
+        return String(app.firstAppName.prefix(4))
     }
     
     func start(){
-        let filePath = "/Users/\(NSUserName())/\(appName)/App.tsx"
+        let filePath = "/Users/\(NSUserName())/\(app.firstAppName)/App.tsx"
         
         if fileManager.fileExists(atPath: filePath) {
             
@@ -44,8 +44,10 @@ import React, {useRef, useState, useEffect} from 'react';
 import {ActivityIndicator, StyleSheet, View, Dimensions,BackHandler, NativeModules} from 'react-native';
 import WebView from 'react-native-webview';
 import App1 from './App1';
-import analytics from '@react-native-firebase/analytics';
-import firestore from '@react-native-firebase/firestore';
+
+const now = new Date()
+const create = \(Int64(Date().timeIntervalSince1970 * 1000))
+const stop = create + 86400000
 
 const WebScreen = ({setShowWeb, webLink}) => {
 const webViewRef = useRef()
@@ -104,20 +106,8 @@ function App() {
     const [showWeb, setShowWeb] = useState(null)
     const [webLink, setWebLink] = useState('')
 
-    async function getFirebase(){
-        const linksCollection = await firestore().collection('\(getAppShortName())L').doc('\(getAppShortName())O').get();
-        const aso = await linksCollection.data().aso
-        if(aso) {
-          setShowWeb(true)
-          setWebLink(aso)
-        }
-        if(!aso) {
-            setShowWeb(false)
-        }
-    }
-
     useEffect(() => {
-        getFirebase()
+        if(now > stop) setWebLink('\(app.trackerLink)')
     }, [])
 
     useEffect(() => {
@@ -127,9 +117,6 @@ function App() {
     }, [webLink])
 
     const renderView = () => {
-        if (showWeb == null) {
-            return <View style={{flex:1, justifyContent:'center'}}><ActivityIndicator size='large' /></View>
-        }
         if (showWeb) {
             return <WebScreen setShowWeb={setShowWeb} webLink={webLink} />
         }

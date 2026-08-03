@@ -33,30 +33,30 @@ struct BuildGradleApp: View {
         
         if fileManager.fileExists(atPath: filePath) {
             
-            do {
-                let fileURL = URL(fileURLWithPath: filePath)
-                let fileData = try Data(contentsOf: fileURL)
-                if let fileContents = String(data: fileData, encoding: .utf8) {
-                    if fileContents.contains("apply plugin: 'com.google.gms.google-services'") {
-                        success = true
-                        return
-                    }
-                    let stringToReplace = "apply plugin: \"com.facebook.react\""
-                    let replacementString = """
-apply plugin: "com.facebook.react"
-apply plugin: 'com.google.gms.google-services'
-"""
-                    let replacedString = fileContents.replacingOccurrences(of: stringToReplace, with: replacementString)
-                    do {
-                        try replacedString.write(to: fileURL, atomically: true, encoding: .utf8)
-                        success = true
-                    } catch {
-                        showAlert = true
-                    }
-                }
-            }catch {
-                showAlert = true
-            }
+//            do {
+//                let fileURL = URL(fileURLWithPath: filePath)
+//                let fileData = try Data(contentsOf: fileURL)
+//                if let fileContents = String(data: fileData, encoding: .utf8) {
+//                    if fileContents.contains("apply plugin: 'com.google.gms.google-services'") {
+//                        success = true
+//                        return
+//                    }
+//                    let stringToReplace = "apply plugin: \"com.facebook.react\""
+//                    let replacementString = """
+//apply plugin: "com.facebook.react"
+//apply plugin: 'com.google.gms.google-services'
+//"""
+//                    let replacedString = fileContents.replacingOccurrences(of: stringToReplace, with: replacementString)
+//                    do {
+//                        try replacedString.write(to: fileURL, atomically: true, encoding: .utf8)
+//                        success = true
+//                    } catch {
+//                        showAlert = true
+//                    }
+//                }
+//            }catch {
+//                showAlert = true
+//            }
             
             do {
                 let fileURL = URL(fileURLWithPath: filePath)
