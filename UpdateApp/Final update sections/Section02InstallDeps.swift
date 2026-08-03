@@ -25,12 +25,12 @@ struct Section02InstallDeps: View {
                 .font(.title)
             
             Button("Установить"){
-                Helpers().openTerminal(content: "cd \(appName) \nnpm i @react-native-firebase/app@25.1.0 @react-native-firebase/analytics@25.1.0 @react-native-firebase/firestore@25.1.0 react-native-webview")
+                Helpers().openTerminal(content: "cd \(appName)")
             }
             
             DefaultButtonView(title: "Готово") {
                 let filePath = "/Users/\(NSUserName())/\(appName)/package.json"
-                let isDone = Helpers().isFileHasContent(filePath: filePath, searchString: "@react-native-firebase")
+                let isDone = Helpers().isFileHasContent(filePath: filePath, searchString: "react-native")
                 
                 if isDone {
                     sections.append(index+1)

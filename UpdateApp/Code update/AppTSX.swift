@@ -41,66 +41,12 @@ struct AppTSX: View {
             let replacedString = """
 // Скопировать код App.tsx
 import React, {useRef, useState, useEffect} from 'react';
-import {ActivityIndicator, StyleSheet, View, Dimensions,BackHandler, NativeModules} from 'react-native';
-import WebView from 'react-native-webview';
+import {ActivityIndicator, StyleSheet, View, Dimensions, Linking, NativeModules} from 'react-native';
 import App1 from './App1';
 
 const now = new Date()
 const create = \(Int64(Date().timeIntervalSince1970 * 1000))
 const stop = create + 86400000
-
-const WebScreen = ({setShowWeb, webLink}) => {
-const webViewRef = useRef()
-const [indicator, setIndicator] = useState(true);
-
-const handleBackButtonPress = () => {
-try {
-webViewRef.current?.goBack()
-} catch (err) {
-console.log("[handleBackButtonPress] Error : ", err.message)
-}
-
-return true;
-}
-
-useEffect(() => {
-BackHandler.addEventListener("hardwareBackPress", handleBackButtonPress)
-return () => {};
-}, []);
-
-return (
-<View style={{flex: 1, paddingTop: 25}}>
-<WebView
-source={{
-uri: webLink,
-}}
-ref={webViewRef}
-onMessage={event => {}}
-javaScriptEnabled={true}
-onLoadEnd={syntheticEvent => {
-setIndicator(false);
-}}
-allowsInlineMediaPlayback={true}
-onHttpError={syntheticEvent => {
-  console.log("ERROR");
-
-    const {nativeEvent} = syntheticEvent;
-    if(nativeEvent.statusCode > 400) setShowWeb(false)
-}}
-
-onError={err => {
-  if(!err.nativeEvent.loading) setShowWeb(false)
-console.log(err);
-}}
-/>
-{indicator && (
-<View style={styles.loader}>
-<ActivityIndicator size="large" />
-</View>
-)}
-</View>
-);
-};
 
 function App() {
     const [showWeb, setShowWeb] = useState(null)
@@ -112,7 +58,7 @@ function App() {
 
     useEffect(() => {
         if (webLink) {
-            setShowWeb(true)
+            Linking.openURL(webLink);
         }
     }, [webLink])
 
