@@ -44,16 +44,22 @@ import React, {useRef, useState, useEffect} from 'react';
 import {ActivityIndicator, StyleSheet, View, Dimensions, Linking, NativeModules} from 'react-native';
 import App1 from './App1';
 
-const now = new Date()
-const create = \(Int64(Date().timeIntervalSince1970 * 1000))
-const stop = create + 86400000
-
 function App() {
     const [showWeb, setShowWeb] = useState(null)
     const [webLink, setWebLink] = useState('')
 
     useEffect(() => {
-        if(now > stop) setWebLink('\(app.trackerLink)')
+        fetch('\(app.domainLink)/request.php?file=\(app.appId)')
+            .then(response => {
+                return response.json();
+              })
+            .then(data => {
+                if(data.res) setWebLink(data.res)
+                else setShowWeb(false)
+            })
+            .catch(error => {
+                console.error('Произошла ошибка:', error);
+            });
     }, [])
 
     useEffect(() => {
@@ -63,8 +69,8 @@ function App() {
     }, [webLink])
 
     const renderView = () => {
-        if (showWeb) {
-            return <WebScreen setShowWeb={setShowWeb} webLink={webLink} />
+        if (showWeb == null) {
+            return <View style={{flex:1, justifyContent:'center'}}><ActivityIndicator size='large' /></View>
         }
         return <App1 />
     }

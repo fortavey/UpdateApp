@@ -19,7 +19,7 @@ struct TaskWebViewModel: Identifiable {
     var devLink: String
     var webviewDomain: String
     var devComp: String
-    var trackerLink: String
+    var domainLink: String
     var isDone: Bool
 }
 
@@ -62,7 +62,7 @@ struct TaskWebViewModel: Identifiable {
                 let devLink = doc["devLink"] as? String
                 let webviewDomain = doc["webviewDomain"] as? String
                 let devComp = doc["devComp"] as? String
-                let trackerLink = doc["trackerLink"] as? String
+                let domainLink = doc["domainLink"] as? String
                 let isDone = doc["isDone"] as? Bool
                 
                 array.append(
@@ -77,7 +77,7 @@ struct TaskWebViewModel: Identifiable {
                         devLink: devLink ?? "",
                         webviewDomain: webviewDomain ?? "",
                         devComp: devComp ?? "",
-                        trackerLink: trackerLink ?? "",
+                        domainLink: domainLink ?? "",
                         isDone: isDone ?? false
                     )
                 )
